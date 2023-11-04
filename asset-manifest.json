@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/hopeo2.github.io/static/css/main.f855e6bc.css",
+    "main.js": "/hopeo2.github.io/static/js/main.7d7d8e8b.js",
+    "static/js/787.9cab0264.chunk.js": "/hopeo2.github.io/static/js/787.9cab0264.chunk.js",
+    "static/media/undraw_walking_in_rain_vo9p.svg": "/hopeo2.github.io/static/media/undraw_walking_in_rain_vo9p.5f3a386f9df6829a7ada702742bbaab8.svg",
+    "index.html": "/hopeo2.github.io/index.html",
+    "main.f855e6bc.css.map": "/hopeo2.github.io/static/css/main.f855e6bc.css.map",
+    "main.7d7d8e8b.js.map": "/hopeo2.github.io/static/js/main.7d7d8e8b.js.map",
+    "787.9cab0264.chunk.js.map": "/hopeo2.github.io/static/js/787.9cab0264.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.7d7d8e8b.js"
+  ]
+}
