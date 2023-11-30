@@ -1,0 +1,33 @@
+.about {
+    background-color: #282A36;
+    padding: 10px;
+    border-radius: 5px;
+    color: rgb(243, 243, 243);
+    overflow-y: scroll;
+}
+.myabout {
+    padding: 20px;
+    margin-top: 10px;
+    font-family: Vazirmatn, sans-serif;
+    font-variant-caps: unicase;
+    font-size: 27px;
+}
+.myabout > h1 {
+    font-size: 35px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    font-family: Vazirmatn, sans-serif;
+}
+.progressbar {
+    margin-top: 60px;    
+}
+
+@media screen and (max-width: 728px) {
+    .myabout {
+        padding: 20px;
+        margin-top: 10px;
+        font-family: Vazirmatn, sans-serif;
+        font-variant-caps: unicase;
+        font-size: 20px;
+    }
+}

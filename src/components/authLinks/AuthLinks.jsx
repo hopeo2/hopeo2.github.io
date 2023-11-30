@@ -31,7 +31,7 @@ const AuthLinks = () => {
       {open && (
         <div className={styles.responsiveMenu}>
           <Link href="/" onClick={() => setOpen(!open)}>$~Homepage</Link>
-          {/* <Link href="/about" onClick={() => setOpen(!open)}>About</Link> */}
+          <Link href="/about" onClick={() => setOpen(!open)}>$~About</Link>
           <Link href="/contact" onClick={() => setOpen(!open)}>$~Contact</Link>
           {/* {status === "notauthenticated" ? (
             <Link href="/login" onClick={() => setOpen(!open)}>Login</Link>
