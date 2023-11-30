@@ -12,7 +12,7 @@ const Footer = () => {
           <h1 className={styles.logoText}>Hope O2</h1>
         </div>
         <p className={styles.desc}>
-          Lorem, ipsum blah blah ah just ah
+          made with ❤️️
         </p>
         <div className={styles.icons}>
         <Link href="https://twitter.com/user_nnnn">
@@ -45,6 +45,7 @@ const Footer = () => {
         <div className={styles.list}>
           <span className={styles.listTitle}>Links</span>
           <Link href="/">Homepage</Link>
+          <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
         </div>
         <div className={styles.list}>
