@@ -69,21 +69,21 @@ const Contact = () => {
     };
 
     return (
-        <section dir="rtl" className="relative flex lg:flex-row flex-col max-container">
+        <section style={{fontFamily: "Vazirmatn, sans-serif"}} dir="rtl" className="relative flex lg:flex-row flex-col max-container">
             {alert.show && <Alert {...alert} />}
             <div className="flex-1 min-w-[50%] flex flex-col">
-                <h1 className="head-text">Get in Touch</h1>
+                <h1 className="head-text">تماس با من</h1>
                 <form
                     onSubmit={handleSubmit}
                     className="w-full flex flex-col gap-7 mt-14"
                 >
                     <label className="text-black-500 font-semibold">
-                        Name
+                        نام
                         <input
                             type="text"
                             name="name"
                             className="input"
-                            placeholder="John"
+                            placeholder="علی"
                             required
                             value={form.name}
                             onChange={handleChange}
@@ -92,12 +92,12 @@ const Contact = () => {
                         />
                     </label>
                     <label className="text-black-500 font-semibold">
-                        Email
+                        ایمیل
                         <input
                             type="email"
                             name="email"
                             className="input"
-                            placeholder="John@gmail.com"
+                            placeholder="ali@gmail.com"
                             required
                             value={form.email}
                             onChange={handleChange}
@@ -106,12 +106,12 @@ const Contact = () => {
                         />
                     </label>
                     <label className="text-black-500 font-semibold">
-                        Your Message
+                        پیام شما
                         <textarea
                             name="message"
                             rows="4"
                             className="textarea"
-                            placeholder="Write your thoughts here..."
+                            placeholder="پیام خود را بنویسید..."
                             value={form.message}
                             onChange={handleChange}
                             onFocus={handleFocus}
@@ -125,7 +125,7 @@ const Contact = () => {
                         onFocus={handleFocus}
                         onBlur={handleBlur}
                     >
-                        {loading ? "Sending..." : "Submit"}
+                        {loading ? "در حال فرستادن..." : "ارسال"}
                     </button>
                 </form>
             </div>

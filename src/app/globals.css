@@ -17,11 +17,11 @@
     }
 
     .head-text {
-        @apply sm:text-5xl text-3xl font-semibold sm:leading-snug;
+        @apply sm:text-5xl text-2xl font-semibold sm:leading-snug;
     }
 
     .subhead-text {
-        @apply font-semibold sm:text-3xl text-xl relative;
+        @apply font-semibold sm:text-3xl text-lg relative;
     }
 
     .blue-gradient_text {
