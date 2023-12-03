@@ -142,7 +142,7 @@ const Featured = () => {
                         >
                             <a
                                 style={{ textDecoration: "underline" }}
-                                href="https:/leilikhorsand.com"
+                                href="https://leilikhorsand.com"
                                 target="_blank"
                             >
                                 دیدن آنلاین
