@@ -37,14 +37,15 @@ const Navbar = () => {
             <a href="/" className={styles.logo}>Hope O2</a>
             <div className={styles.links}>
                 <ThemeToggle />
-                <Link href="/" className={styles.link}>
-                    Homepage
-                </Link>
+                
                 <Link href="/contact" className={styles.link}>
-                    Contact
+                    تماس با من
                 </Link>
                 <Link href="/about" className={styles.link}>
-                    About
+                    درباره من
+                </Link>
+                <Link href="/" className={styles.link}>
+                    خانه
                 </Link>
                 {/* <Link href="/" className={styles.link}>
                     About

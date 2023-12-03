@@ -122,6 +122,19 @@ const page = () => {
                     />
                 </div>
             </div>
+            <div className={styles.certi}>
+                <h1 style={{fontSize: "30px", padding: "20px"}}>گواهی های من</h1>
+                <div>
+                    <Image src="/assets/images/5e7b6c3bd4074bbc80d8d8ff88991651.jpg" width={400} height={35} />
+                    <a style={{textDecoration: "underline", color: "blue", padding: "20px"}} href="https://quera.org/media/public/quera_certificate/5e7b6c3bd4074bbc80d8d8ff88991651.jpg" target="_blank">آموزش طراحی وب (Front-End)</a>
+                </div>
+            </div>
+            <div className={styles.projects}>
+                <h1 style={{fontSize: "30px", padding: "20px"}}>پروژه های من</h1>
+                <div>
+                    در حال توسعه ...
+                </div>
+            </div>
         </>
     );
 };

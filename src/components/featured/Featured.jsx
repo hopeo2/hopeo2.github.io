@@ -8,22 +8,24 @@ const Featured = () => {
     <div className={styles.container}>
       <section className="max-container">
             <h1 className="head-text">
-                Hello, I'm{" "}
+                سلام من
                 <span className="blue-gradient_text font-semibold drop-shadow">
                     {" "}
-                    Omid
-                </span>{" "}
+                    امید
+                </span>
+                &nbsp;
+                 هستم
                 👋
             </h1>
 
             <div className="mt-5 flex flex-col gap-3 text-slate-500">
                 <p>
-                    simple developer who still learning ... <a className={styles.touch} href="/contact">Get in touch</a>
+                    یک توسعه دهنده در حال یادگیری ... <a className={styles.touch} href="/contact">با من در تماس باشید</a>
                 </p>
             </div>
 
             <div className="py-10 flex flex-col">
-                <h3 className="subhead-text">My Skills</h3>
+                <h3 className="subhead-text">توانایی ها</h3>
 
                 <div className="mt-16 flex flex-wrap gap-12">
                     {skills.map((skill) => (

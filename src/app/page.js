@@ -7,7 +7,7 @@ import CategoryList from "@/components/categoryList/CategoryList";
 export default function Home() {
 
   return (
-    <div className={styles.container}>
+    <div dir="rtl" className={styles.container}>
       <Featured />
       {/* <CategoryList />
       <div className={styles.content}>

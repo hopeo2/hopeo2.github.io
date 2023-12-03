@@ -4,6 +4,7 @@
     border-radius: 5px;
     color: rgb(243, 243, 243);
     overflow-y: scroll;
+    direction: ltr !important;
 }
 .myabout {
     padding: 20px;
@@ -20,6 +21,15 @@
 }
 .progressbar {
     margin-top: 60px;    
+}
+.certi {
+    font-family: Vazirmatn, sans-serif;
+    margin-top: 50px;
+    direction: rtl;
+}
+.projects {
+    direction: rtl;
+    font-family: Vazirmatn, sans-serif;
 }
 
 @media screen and (max-width: 728px) {
