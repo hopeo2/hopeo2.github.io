@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import emailjs from "@emailjs/browser";
 
@@ -10,7 +10,6 @@ import Loader from "../../components/loader/Loader.jsx";
 import Alert from "../../components/alert/Alert.jsx";
 
 const Contact = () => {
-    const formRef = useRef(null);
     const [form, setForm] = useState({ name: "", email: "", message: "" });
     const { alert, showAlert, hideAlert } = useAlert();
     const [loading, setLoading] = useState(false);
@@ -27,10 +26,11 @@ const Contact = () => {
         e.preventDefault();
         setLoading(true);
         setCurrentAnimation("hit");
+
         emailjs
             .send(
-                process.env.VITE_APP_EMAILJS_SERVICE_ID,
-                process.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
                 {
                     from_name: form.name,
                     to_name: "Hope",
@@ -38,7 +38,7 @@ const Contact = () => {
                     to_email: "omidobeidzadeh@gmail.com",
                     message: form.message,
                 },
-                process.env.VITE_APP_EMAILJS_PUBLIC_KEY
+                process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
             )
             .then(() => {
                 setLoading(false);
