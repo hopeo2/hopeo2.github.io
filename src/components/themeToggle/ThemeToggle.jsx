@@ -16,7 +16,7 @@ const ThemeToggle = () => {
         theme === "dark" ? { backgroundColor: "white" } : { backgroundColor: "#0f172a" }
       }
     >
-      <Image src="/moon.png" alt="" width={14} height={14} />
+      <Image src="/moon.png" alt="" width={20} height={18} />
       <div
         className={styles.ball}
         style={
