@@ -55,6 +55,11 @@
   width: max-content;
 }
 
+.projectss {
+  display: flex;
+  justify-content: space-around;
+}
+
 @media screen and (max-width: 1280px) {
   .title {
     font-size: 72px;
@@ -80,5 +85,10 @@
 @media screen and (max-width: 640px) {
   .title {
     font-size: 36px;
+  }
+  .projectss {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
   }
 }
