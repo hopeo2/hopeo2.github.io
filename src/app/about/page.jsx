@@ -247,12 +247,6 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.projects}>
-                <h1 style={{ fontSize: "30px", padding: "20px" }}>
-                    پروژه های من
-                </h1>
-                <div>در حال توسعه ...</div>
-            </div>
         </>
     );
 };
