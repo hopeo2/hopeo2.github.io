@@ -73,6 +73,46 @@ const Featured = () => {
                 <div className={styles.projectss}>
                     <div class="max-w-sm rounded overflow-hidden shadow-lg">
                         <Image
+                            src="/assets/images/tw-scrap.png"
+                            width={400}
+                            height={400}
+                        />
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl mb-2">
+                                Scraping Twitter
+                            </div>
+                            <p class="text-base">
+                                این ابزار با استفاده از nodejs و nextjs ساخته
+                                شده
+                            </p>
+                        </div>
+                        <div class="px-6 pt-4 pb-2">
+                            <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                                javascript#
+                            </span>
+                            <span className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">
+                                nextjs#
+                            </span>
+                            <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
+                                fetch#
+                            </span>
+                        </div>
+                        <div
+                            dir="ltr"
+                            style={{ fontSize: "20px", padding: "5px" }}
+                        >
+                            <button className="bg-sky-500/100 p-1 rounded">
+                                <a
+                                    href="https://twitter-chi-mige.vercel.app/"
+                                    target="_blank"
+                                >
+                                    دیدن آنلاین
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                        <Image
                             src="/assets/images/image-ai-gen-pic.png"
                             width={400}
                             height={400}
@@ -101,13 +141,14 @@ const Featured = () => {
                             dir="ltr"
                             style={{ fontSize: "20px", padding: "5px" }}
                         >
-                            <a
-                                style={{ textDecoration: "underline" }}
-                                href="https://ai-image-client-peach.vercel.app/"
-                                target="_blank"
-                            >
-                                دیدن آنلاین
-                            </a>
+                            <button className="bg-sky-500/100 p-1 rounded">
+                                <a
+                                    href="https://ai-image-client-peach.vercel.app/"
+                                    target="_blank"
+                                >
+                                    دیدن آنلاین
+                                </a>
+                            </button>
                         </div>
                     </div>
                     <div class="max-w-sm rounded overflow-hidden shadow-lg">
@@ -140,13 +181,14 @@ const Featured = () => {
                             dir="ltr"
                             style={{ fontSize: "20px", padding: "5px" }}
                         >
-                            <a
-                                style={{ textDecoration: "underline" }}
-                                href="https://leilikhorsand.com"
-                                target="_blank"
-                            >
-                                دیدن آنلاین
-                            </a>
+                            <button className="bg-sky-500/100 p-1 rounded">
+                                <a
+                                    href="https://leilikhorsand.com"
+                                    target="_blank"
+                                >
+                                    دیدن آنلاین
+                                </a>
+                            </button>
                         </div>
                     </div>
                 </div>
