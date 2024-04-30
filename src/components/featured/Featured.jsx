@@ -8,20 +8,12 @@ const Featured = () => {
         <div className={styles.container}>
             <section className="max-container">
                 <h1 className="head-text">
-                    سلام من
-                    <span className="blue-gradient_text font-semibold drop-shadow">
-                        {" "}
-                        امید
-                    </span>
-                    &nbsp; هستم 👋
+                    سلام ..
                 </h1>
 
                 <div className="mt-5 flex flex-col gap-3 text-slate-500">
                     <p>
-                        یک توسعه دهنده در حال یادگیری ...{" "}
-                        <a className={styles.touch} href="/contact">
-                            با من در تماس باشید
-                        </a>
+                        hopeo2
                     </p>
                 </div>
 
@@ -68,23 +60,20 @@ const Featured = () => {
                         marginBottom: "25px",
                     }}
                 >
-                    پروژه های من
+                    projects
                 </h1>
                 <div className={styles.projectss}>
-                    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                    <div className="max-w-sm rounded overflow-hidden shadow-lg">
                         <Image
                             src="/assets/images/tw-scrap.png"
                             width={400}
                             height={400}
                         />
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">
+                        <div className="px-6 py-4">
+                            <div className="font-bold text-xl mb-2">
                                 Scraping Twitter
                             </div>
-                            <p class="text-base">
-                                این ابزار با استفاده از nodejs و nextjs ساخته
-                                شده
-                            </p>
+                            
                         </div>
                         <div class="px-6 pt-4 pb-2">
                             <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
@@ -111,62 +100,20 @@ const Featured = () => {
                             </button>
                         </div>
                     </div>
-                    <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                        <Image
-                            src="/assets/images/image-ai-gen-pic.png"
-                            width={400}
-                            height={400}
-                        />
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">
-                                Image Ai Generator
-                            </div>
-                            <p class="text-base">
-                                در این پروژه از ری اکت برای سمت فرانت و از نود
-                                جی اس و مونگو دی بی در سمت سرور استفاده شده
-                            </p>
-                        </div>
-                        <div class="px-6 pt-4 pb-2">
-                            <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
-                                javascript#
-                            </span>
-                            <span className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">
-                                reactjs#
-                            </span>
-                            <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
-                                nodejs#
-                            </span>
-                        </div>
-                        <div
-                            dir="ltr"
-                            style={{ fontSize: "20px", padding: "5px" }}
-                        >
-                            <button className="bg-sky-500/100 p-1 rounded">
-                                <a
-                                    href="https://ai-image-client-peach.vercel.app/"
-                                    target="_blank"
-                                >
-                                    دیدن آنلاین
-                                </a>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                    
+                    <div className="max-w-sm rounded overflow-hidden shadow-lg">
                         <Image
                             src="/assets/images/image-leili-pic.png"
                             width={400}
                             height={400}
                         />
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">
+                        <div className="px-6 py-4">
+                            <div className="font-bold text-xl mb-2">
                                 Leili Khorsand
                             </div>
-                            <p class="text-base">
-                                این ویسایت با استفاده از سیستم مدیریت محتوای
-                                وردپرس (wordpress) پیاده سازی شده
-                            </p>
+                            
                         </div>
-                        <div class="px-6 pt-4 pb-2">
+                        <div className="px-6 pt-4 pb-2">
                             <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
                                 wordpress#
                             </span>

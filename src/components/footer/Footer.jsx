@@ -31,7 +31,7 @@ const Footer = () => {
                         height={25}
                     />
                 </Link>
-                <Link target="_blank" href="https://t.me/pooffmm">
+                <Link target="_blank" href="https://t.me/booppfff">
                     <Image
                         src="/assets/icons/tele-pn.png"
                         alt="tiktok"
