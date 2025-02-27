@@ -15,7 +15,7 @@ const Footer = () => {
           made with ❤️️
         </p>
         <div className={styles.icons}>
-        <Link href="https://twitter.com/user_nnnn">
+        <Link href="https://twitter.com/killedbyislam">
                     <Image
                         src="/assets/icons/twitter.png"
                         alt="twitter"

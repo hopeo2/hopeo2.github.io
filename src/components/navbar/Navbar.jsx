@@ -9,7 +9,7 @@ const Navbar = () => {
     return (
         <div className={styles.container}>
             <div className={styles.social}>
-                <Link href="https://twitter.com/user_nnnn">
+                <Link href="https://twitter.com/killedbyislam">
                     <Image
                         src="/assets/icons/twitter.png"
                         alt="twitter"
