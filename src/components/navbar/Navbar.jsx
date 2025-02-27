@@ -25,7 +25,7 @@ const Navbar = () => {
                         height={25}
                     />
                 </Link>
-                <Link target="_blank" href="https://t.me/booppfff">
+                <Link target="_blank" href="https://t.me/thisis_avatar">
                     <Image
                         src="/assets/icons/tele-pn.png"
                         alt="tiktok"
