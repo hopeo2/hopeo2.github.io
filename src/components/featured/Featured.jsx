@@ -7,6 +7,9 @@ const Featured = () => {
     return (
         <div className={styles.container}>
             <section className="max-container">
+                <div className="flex justify-center items-center">
+                    <Image src="/assets/images/photo-me.png" alt="lama blog" width={150} height={150} />
+                </div>
                 <h1 className="head-text">
                     سلام ..
                 </h1>
