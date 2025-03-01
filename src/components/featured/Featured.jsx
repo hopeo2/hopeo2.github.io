@@ -8,16 +8,17 @@ const Featured = () => {
         <div className={styles.container}>
             <section className="max-container">
                 <div className="flex justify-center items-center">
-                    <Image src="/assets/images/photo-me.png" alt="lama blog" width={150} height={150} />
+                    <Image
+                        src="/assets/images/photo-me.png"
+                        alt="lama blog"
+                        width={150}
+                        height={150}
+                    />
                 </div>
-                <h1 className="head-text">
-                    سلام ..
-                </h1>
+                <h1 className="head-text">سلام ..</h1>
 
                 <div className="mt-5 flex flex-col gap-3 text-slate-500">
-                    <p>
-                        hopeo2
-                    </p>
+                    <p>hopeo2</p>
                 </div>
 
                 <div className="py-10 flex flex-col">
@@ -68,22 +69,21 @@ const Featured = () => {
                 <div className={styles.projectss}>
                     <div className="max-w-sm rounded overflow-hidden shadow-lg">
                         <Image
-                            src="/assets/images/tw-scrap.png"
+                            src="/assets/images/movie-hope.png"
                             width={400}
                             height={400}
                         />
                         <div className="px-6 py-4">
                             <div className="font-bold text-xl mb-2">
-                                Scraping Twitter
+                                Movie react-19
                             </div>
-                            
                         </div>
                         <div class="px-6 pt-4 pb-2">
                             <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
                                 javascript#
                             </span>
                             <span className="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10">
-                                nextjs#
+                                react-19#
                             </span>
                             <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
                                 fetch#
@@ -95,7 +95,8 @@ const Featured = () => {
                         >
                             <button className="p-1 rounded">
                                 <a
-                                    href="https://twitter-chi-mige.vercel.app/"
+                                    className="border border-gray-500 px-4 py-2 rounded"
+                                    href="https://movie-react19.vercel.app/"
                                     target="_blank"
                                 >
                                     دیدن آنلاین
@@ -103,7 +104,7 @@ const Featured = () => {
                             </button>
                         </div>
                     </div>
-                    
+
                     <div className="max-w-sm rounded overflow-hidden shadow-lg">
                         <Image
                             src="/assets/images/image-leili-pic.png"
@@ -114,7 +115,6 @@ const Featured = () => {
                             <div className="font-bold text-xl mb-2">
                                 Leili Khorsand
                             </div>
-                            
                         </div>
                         <div className="px-6 pt-4 pb-2">
                             <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
@@ -133,6 +133,7 @@ const Featured = () => {
                         >
                             <button className="p-1 rounded">
                                 <a
+                                    className="border border-gray-500 px-4 py-2 rounded"
                                     href="https://leilikhorsand.com"
                                     target="_blank"
                                 >
@@ -151,7 +152,6 @@ const Featured = () => {
                             <div className="font-bold text-xl mb-2">
                                 github api
                             </div>
-                            
                         </div>
                         <div className="px-6 pt-4 pb-2">
                             <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
@@ -170,6 +170,7 @@ const Featured = () => {
                         >
                             <button className="p-1 rounded">
                                 <a
+                                    className="border border-gray-500 px-4 py-2 rounded"
                                     href="https://github-api-app-zeta.vercel.app/"
                                     target="_blank"
                                 >
