@@ -1,0 +1,41 @@
+
+@import "tailwindcss";
+
+@theme {
+  --color-bg-main: #282C33;
+  --color-main: #C778DD;
+  --color-secondary: #ABB2BF;
+  --color-white: #FFFFFF;
+  --font-body: 'Chivo Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-bg-main);
+  color: var(--color-white);
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
