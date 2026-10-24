@@ -1,17 +1,17 @@
 export const site = {
 	name: 'Omid',
 	title: 'Front-end Developer',
-	email: 'hello@iamomid.github.io',
+	email: 'hello@hopeo2.github.io',
 	location: 'Kyiv, Ukraine',
 	bio:
 		"Self-taught front-end developer. I build responsive websites where technologies meet creativity, turning ideas into modern, user-friendly web experiences.",
 	tagline: 'Web designer & front-end developer',
 	avatar: '/images/avatar.png',
 	social: [
-		{ label: 'GitHub', href: 'https://github.com/Iamomid', icon: 'github' },
-		{ label: 'Instagram', href: 'https://instagram.com/Iamomid', icon: 'instagram' },
-		{ label: 'YouTube', href: 'https://youtube.com/@Iamomid', icon: 'youtube' },
-		{ label: 'Email', href: 'mailto:hello@iamomid.github.io', icon: 'email' },
+		{ label: 'GitHub', href: 'https://github.com/hopeo2', icon: 'github' },
+		{ label: 'Instagram', href: 'https://instagram.com/hopeo2', icon: 'instagram' },
+		{ label: 'YouTube', href: 'https://youtube.com/@hopeo2', icon: 'youtube' },
+		{ label: 'Email', href: 'mailto:hello@hopeo2.github.io', icon: 'email' },
 	],
 }
 

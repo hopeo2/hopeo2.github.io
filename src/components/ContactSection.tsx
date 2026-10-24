@@ -27,7 +27,7 @@ export function ContactSection() {
 								<div>
 									<p className="font-bold">GitHub</p>
 									<a href={site.social[0].href} target="_blank" rel="noopener noreferrer" className="text-current/80 underline underline-offset-2 hover:no-underline">
-										github.com/Iamomid
+										github.com/hopeo2
 									</a>
 								</div>
 							</div>

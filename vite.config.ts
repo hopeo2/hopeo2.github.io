@@ -27,7 +27,7 @@ const config = defineConfig({
       },
       sitemap: {
         enabled: true,
-        host: 'https://iamomid.github.io',
+        host: 'https://hopeo2.github.io',
       },
       spa: {
         enabled: false,
