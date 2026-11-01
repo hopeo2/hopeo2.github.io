@@ -49,7 +49,7 @@ export function ContactCta() {
 									variant="secondary"
 									icon="arrow-right"
 								>
-									Contact details
+									Send a message
 								</ButtonLink>
 							</div>
 						</div>

@@ -25,7 +25,7 @@ export const site = {
 	name: "Omid",
 	role: "Front-end Developer",
 	tagline: "Web designer & front-end developer",
-	email: "hello@hopeo2.github.io",
+	email: "odoohope@gmail.com",
 	location: "Kyiv, Ukraine",
 	availability: "Available for freelance work",
 	bio: "Self-taught front-end developer. I build responsive websites where technologies meet creativity, turning ideas into modern, user-friendly web experiences.",

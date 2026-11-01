@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
-import { cn } from "#/lib/cn";
 import { AppLink, type AppLinkProps } from "./AppLink";
+import {
+	type ButtonSize,
+	type ButtonVariant,
+	buttonStyles,
+} from "./buttonStyles";
 import { Icon, type IconName } from "./Icon";
-
-type ButtonVariant = "primary" | "secondary" | "ghost";
-type ButtonSize = "md" | "sm";
 
 export type ButtonLinkProps = AppLinkProps & {
 	readonly variant?: ButtonVariant;
@@ -12,20 +13,6 @@ export type ButtonLinkProps = AppLinkProps & {
 	readonly icon?: IconName;
 	readonly iconPosition?: "left" | "right";
 	readonly children: ReactNode;
-};
-
-const VARIANTS: Record<ButtonVariant, string> = {
-	primary:
-		"bg-brand text-canvas-deep hover:bg-brand-bright focus-visible:outline-text",
-	secondary:
-		"border border-border bg-surface/40 text-text hover:border-border-brand hover:bg-surface focus-visible:outline-brand",
-	ghost:
-		"border border-transparent text-text-muted hover:bg-surface/50 hover:text-text focus-visible:outline-brand",
-};
-
-const SIZES: Record<ButtonSize, string> = {
-	md: "min-h-11 px-5 text-sm",
-	sm: "min-h-11 px-3.5 text-xs",
 };
 
 export function ButtonLink({
@@ -42,12 +29,7 @@ export function ButtonLink({
 	return (
 		<AppLink
 			{...linkProps}
-			className={cn(
-				"inline-flex items-center justify-center gap-2.5 rounded-control font-semibold transition-[transform,background-color,border-color,color] duration-200 ease-out motion-safe:hover:-translate-y-0.5",
-				VARIANTS[variant],
-				SIZES[size],
-				className,
-			)}
+			className={buttonStyles({ variant, size, className })}
 		>
 			{icon && iconPosition === "left" ? iconNode : null}
 			<span>{children}</span>

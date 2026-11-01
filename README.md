@@ -43,7 +43,7 @@ No additional UI, animation or utility packages are used.
 | `/projects`          | Full archive with an accessible technology filter              |
 | `/projects/$slug`    | Case study for each project                                    |
 | `/about`             | Story, path, working principles and contact CTA                |
-| `/contact`           | Email CTA, details, social links and services                  |
+| `/contact`           | Message form, email CTA, details, social links and services    |
 
 The four primary routes are explicitly prerendered, along with every project
 case study. A styled in-app 404/error view is provided by the root route, and
@@ -55,12 +55,14 @@ case study. A styled in-app 404/error view is provided by the root route, and
 src/
   components/
     about/        PortraitCard (CSS/SVG monogram)
+    contact/      ContactForm (FormSubmit-backed message form)
     layout/       Container, Section, Header, Footer, Layout
     nav/          Brand, DesktopNav, MobileMenu, SocialLinks
     projects/     ProjectCard, ProjectCover, ProjectsArchive
     sections/     Hero, SelectedWork, Skills, AboutPreview, Quote, ContactCta
     system/       NotFoundView, ErrorView
-    ui/           AppLink, ButtonLink, Badge, Icon, PageIntro, SectionHeading
+    ui/           AppLink, ButtonLink, Badge, Icon, PageIntro, SectionHeading,
+                  buttonStyles
   data/           site, navigation, projects, skills, about, contact, quote
   lib/            cn, link classification, route metadata helper
   routes/         file-based routes; routeTree.gen.ts is generated
@@ -82,6 +84,23 @@ social URLs.
 
 `src/lib/links.ts` defines the allowed external, mail and hash href types.
 
+## Contact form
+
+`/contact` includes a message form that delivers email to `site.email` through
+[FormSubmit](https://formsubmit.co). It needs no backend, server or API key.
+
+- The first submission sends a one-time **Activate Form** email to the address
+  in `src/data/site.ts`. Click the link before relying on the form.
+- With JavaScript the form posts to `https://formsubmit.co/ajax/<email>` and
+  shows inline success/error feedback. Without JavaScript it posts to
+  `https://formsubmit.co/<email>` and redirects to `/contact/?sent=1`.
+- The address is visible in the form markup, exactly as it already is in the
+  `mailto:` links, so it must be treated as public.
+- Spam is limited with FormSubmit's `_honey` honeypot. `_captcha=false` is
+  required for the AJAX request.
+- Changing `email` in `src/data/site.ts` updates the form endpoint, the
+  `mailto:` links and every visible address at once.
+
 ## Content editing
 
 - **Identity, email, location, socials** — `src/data/site.ts`
@@ -89,7 +108,7 @@ social URLs.
 - **Navigation labels and order** — `src/data/navigation.ts`
 - **Skills groups** — `src/data/skills.ts`
 - **About story, timeline, principles** — `src/data/about.ts`
-- **Contact copy and services** — `src/data/contact.ts`
+- **Contact copy, form labels and services** — `src/data/contact.ts`
 - **Pull quote** — `src/data/quote.ts`
 
 ### Adding a project
@@ -150,6 +169,9 @@ uploading `dist/client` as the Pages artifact.
   outline on the purple surface
 - All icon-only controls have accessible names
 - External links announce new-tab behaviour; email links do not open a tab
+- Contact form: every field has a visible label, required fields are marked in
+  text, the submit button reports its busy state, and success/error feedback is
+  announced through a focused `<output>` status region
 - Mobile menu: `aria-expanded` / `aria-controls`, `inert` and `aria-hidden` when
   closed, closes on Escape, outside pointer-down, link selection and route
   change
@@ -163,5 +185,6 @@ uploading `dist/client` as the Pages artifact.
   `PortraitCard` with a real optimized image if one becomes available.
 - Project case-study copy is derived from the existing project descriptions. No
   employers, testimonials, metrics or credentials were invented.
-- The site intentionally has no contact form because there is no backend; email
-  is the reliable contact path.
+- The contact form is delivered by FormSubmit, so message content passes through
+  a third party. The direct email address stays visible next to the form for
+  anyone who prefers their own mail app.

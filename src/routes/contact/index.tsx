@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContactForm } from "#/components/contact/ContactForm";
 import { Container } from "#/components/layout/Container";
 import { Section } from "#/components/layout/Section";
 import { SocialLinks } from "#/components/nav/SocialLinks";
@@ -8,22 +9,28 @@ import { ButtonLink } from "#/components/ui/ButtonLink";
 import { Icon } from "#/components/ui/Icon";
 import { PageIntro } from "#/components/ui/PageIntro";
 import { SectionHeading } from "#/components/ui/SectionHeading";
-import { contactPage } from "#/data/contact";
+import { contactForm, contactPage } from "#/data/contact";
 import { emailHref, site } from "#/data/site";
 import { routeHead } from "#/lib/seo";
 
+type ContactSearch = { sent?: true };
+
 export const Route = createFileRoute("/contact/")({
+	validateSearch: (search: Record<string, unknown>): ContactSearch =>
+		search.sent === "1" || search.sent === 1 ? { sent: true } : {},
 	head: () =>
 		routeHead({
 			title: "Contact",
 			description:
-				"Get in touch with Omid, a front-end developer in Kyiv. Email is the best way to discuss freelance projects, collaborations and front-end work.",
+				"Send a message to Omid, a front-end developer in Kyiv, about freelance projects, collaborations and front-end work — or email directly.",
 			path: "/contact",
 		}),
 	component: ContactPage,
 });
 
 function ContactPage() {
+	const { sent } = Route.useSearch();
+
 	return (
 		<>
 			<PageIntro
@@ -104,6 +111,20 @@ function ContactPage() {
 				</Container>
 			</Section>
 
+			<Section labelledBy="message-title" className="border-t border-border">
+				<Container className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+					<SectionHeading
+						id="message-title"
+						eyebrow="02 — Message"
+						title={contactForm.title}
+						description={contactForm.description}
+					/>
+					<div className="rounded-feature border border-border bg-surface/30 p-6 sm:p-8">
+						<ContactForm confirmed={sent === true} />
+					</div>
+				</Container>
+			</Section>
+
 			<Section
 				labelledBy="elsewhere-title"
 				className="border-t border-border bg-canvas-deep/30"
@@ -111,7 +132,7 @@ function ContactPage() {
 				<Container className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
 					<SectionHeading
 						id="elsewhere-title"
-						eyebrow="02 — Elsewhere"
+						eyebrow="03 — Elsewhere"
 						title="Find me online."
 						description="Code, experiments and the occasional video. Every link opens in a new tab except email."
 					/>
@@ -123,7 +144,7 @@ function ContactPage() {
 				<Container>
 					<SectionHeading
 						id="services-title"
-						eyebrow="03 — Services"
+						eyebrow="04 — Services"
 						title="What I can help with."
 						description="A small, focused set of ways to work together. If your project does not fit neatly, describe it anyway."
 					/>

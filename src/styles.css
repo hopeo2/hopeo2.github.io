@@ -14,6 +14,8 @@
 	--color-brand-strong: #a855c8;
 	--color-brand-bright: #d79ae8;
 	--color-brand-soft: rgba(199, 120, 221, 0.12);
+	--color-danger: #e8838a;
+	--color-danger-soft: rgba(232, 131, 138, 0.12);
 
 	--font-mono: "Chivo Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
