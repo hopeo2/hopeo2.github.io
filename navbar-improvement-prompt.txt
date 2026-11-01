@@ -1,0 +1,141 @@
+================================================================================
+AI PROMPT: Senior Frontend Developer — Navbar, Hamburger Menu, Bug Fixes,
+Gradient Background, Hover-Open, and Polish
+================================================================================
+
+You are a senior frontend developer. I am working on a personal portfolio
+website for "Omid" (front-end developer). The app is built with:
+
+- TanStack Start (React 19)
+- TanStack Router
+- Tailwind CSS v4
+- TypeScript
+
+All source code lives in src/. Styling uses Tailwind utility classes and
+theme tokens defined in src/styles.css:
+
+  @theme {
+    --color-bg-main: #282C33;
+    --color-main: #C778DD;        (brand purple)
+    --color-secondary: #ABB2BF;
+    --color-white: #FFFFFF;
+    --font-body: 'Chivo Mono', monospace;
+  }
+
+Existing files you will modify:
+- src/components/Nav.tsx
+- src/components/Layout.tsx
+- src/styles.css
+
+Do NOT add new npm packages. Use only existing dependencies
+(React, TanStack Router, Tailwind v4, TypeScript).
+
+================================================================================
+TASK — Do ALL of the following:
+================================================================================
+
+1. NAVBAR + HAMBURGER MENU FOR SMALL WINDOWS (RESPONSIVE)
+   - Keep the existing mobile hamburger button (toggle state) for small
+     windows (< md breakpoint). It toggles mobileOpen and animates a
+     dropdown panel (max-h-0/opacity-0 <-> max-h-96/opacity-100).
+   - Make the hamburger menu fully responsive and accessible:
+     * aria-label, aria-expanded, aria-hidden on SVG icon
+     * Works on touch devices (tap toggles menu)
+     * Closes when a link inside the mobile panel is clicked
+     * Keyboard accessible (Enter/Space on the button)
+   - Keep the desktop layout intact and polished:
+     * Brand logo "Omid" with gradient text
+     * Social icons (GitHub, Instagram, YouTube, Email)
+     * Nav links: Home, Works, About Me, Contacts
+   - Use existing theme colors (--color-main, --color-secondary, etc.)
+
+2. FIX THE BUGS
+   Bug A — Social links use plain <a href> causing full page reload:
+   - The social links in the navbar use <a href> instead of TanStack Router
+     <Link to>. Clicking them does a full page reload and breaks client-side
+     navigation / active state.
+   - Fix: Replace social <a href> elements with TanStack Router <Link>
+     (using the href values as the target). Keep target="_blank"
+     rel="noopener noreferrer" for true external URLs (GitHub, Instagram,
+     YouTube). For "Email" (mailto:), keep it as an <a> since <Link> cannot
+     do mailto safely.
+   - Expected: clicking social links navigates without full page reload;
+     navbar links retain active styling (text-main / bg-main/10);
+     mobile hamburger closes after selection.
+
+   Bug B — Navbar background uses bg-current/80 and border-current/20 which
+   resolve to white (wrong):
+   - Replace with proper theme colors: bg-bg-main/80, border-main/20, etc.
+   - Make the navbar sticky, translucent with backdrop-blur, and polished.
+
+   Bug C — Layout overflow caused by sticky nav:
+   - Ensure no horizontal overflow; add overflow-x-hidden on the shell.
+
+3. MORE GRADIENT IN BACKGROUND
+   - Strengthen the background gradients on the app shell (Layout.tsx and/or
+     body in styles.css). Current shell uses:
+       bg-gradient-to-br from-bg-main via-[#1e2229] to-main/20
+   - Make it richer/more gradient-heavy: blend brand purple (#C778DD),
+     dark bg (#282C33), and secondary (#ABB2BF) with multiple stops and
+     radial overlays.
+   - Add a subtle animated gradient (slowly shifting radial/linear gradients)
+     using existing keyframes (gradient-shift / gradient-move / gradient-shimmer)
+     or new ones.
+   - Enhance the navbar background gradient so it feels more vibrant while
+     keeping text readable over it.
+   - Keep sufficient contrast for white text over gradients.
+
+4. NAVBAR OPENS ON HOVER (DESKTOP)
+   - On desktop (md: and up), make the nav links expand/reveal a panel when
+     the user hovers over the navbar (group-hover).
+   - Ensure smooth transition (duration/opacity/transform).
+   - Keyboard focus (focus-within) also opens the menu for accessibility.
+   - Keep mobile behavior: hamburger button ONLY (no hover on touch).
+
+5. ADDITIONAL IMPROVEMENTS ("and so more" — senior frontend polish)
+   Accessibility:
+   - ARIA labels on all interactive elements
+   - Keyboard navigation (Tab order, focus rings ring-2 ring-main)
+   - Skip-to-content link already present — keep it
+   - Visible focus states
+
+   Responsiveness:
+   - Desktop menu hides on small screens (hidden md:flex)
+   - Hamburger toggles on md:hidden
+   - Touch-friendly tap targets (min 44x44px)
+
+   Animations:
+   - Smooth fade/slide transitions on mobile menu open/close
+   - Hover lift (hover:-translate-y-0.5) and hover color/background transitions
+   - Subtle animated background gradients
+
+   Polishing:
+   - Better typography/spacing
+   - Rounded corners (rounded-md)
+   - Subtle shadows (shadow-lg shadow-main/20)
+   - Gradient text for the "Omid" brand (bg-clip-text text-transparent)
+   - Focus-visible rings
+   - Keep existing color palette and Chivo Mono font
+
+================================================================================
+CONSTRAINTS
+================================================================================
+- Use only existing dependencies. No new packages.
+- Keep TypeScript types correct (noUnusedLocals/noUnusedParameters clean).
+- Keep NAV_LINKS, routes, and social link destinations intact.
+- Do not break routing.
+- Maintain accessibility (aria labels, keyboard navigation).
+- Verify with: npm run check (biome) and npm run build.
+
+================================================================================
+DELIVERABLE
+================================================================================
+- Updated src/components/Nav.tsx
+- Updated src/components/Layout.tsx (gradient enhancements)
+- Updated src/styles.css (new gradient keyframes if needed)
+- A short summary of: the bug fixes, gradient changes, how hover-open works,
+  and accessibility/responsiveness notes.
+
+================================================================================
+END OF PROMPT
+================================================================================

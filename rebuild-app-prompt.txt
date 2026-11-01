@@ -1,0 +1,9 @@
+Act as a senior frontend developer. Rebuild the website app to improve code quality, maintainability, and user experience. Specifically:
+
+1. Implement a responsive navbar with a hamburger menu for small screens. The navbar should be accessible via hover on desktop for opening/interacting (or as appropriate for a senior-level UX).
+
+2. Enhance the background design by implementing more sophisticated gradient styles, ensuring visual consistency across the app.
+
+3. Analyze the existing codebase to identify and fix critical bugs to ensure smooth app functionality.
+
+4. Adhere to best practices for React/TypeScript, clean code, component modularity, and accessibility.

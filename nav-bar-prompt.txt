@@ -1,0 +1,86 @@
+================================================================================
+AI PROMPT: Navbar, Hamburger Menu, Bug Fix, Gradient Background & Hover Open
+================================================================================
+
+You are improving a personal portfolio website for "Omid" (front-end developer).
+The app is built with TanStack Start (React 19), TanStack Router, Tailwind CSS v4,
+and TypeScript. All code lives in src/. Styling uses Tailwind utility classes and
+theme tokens defined in src/styles.css:
+  --color-bg-main: #282C33
+  --color-main: #C778DD (purple)
+  --color-secondary: #ABB2BF
+  --color-white: #FFFFFF
+  --font-body: 'Chivo Mono', monospace
+
+TASK: Improve the navigation bar (src/components/Nav.tsx) and the overall page
+background. Do ALL of the following:
+
+1. NAVBAR + HAMBURGER MENU FOR SMALL WINDOWS (RESPONSIVE)
+   - Keep the existing mobile hamburger button (toggle state) for small windows
+     (< md breakpoint). It currently toggles mobileOpen and animates a dropdown
+     panel with max-h-96 / opacity-0 -> max-h-96 / opacity-100.
+   - Make sure the hamburger menu is fully responsive: accessible (aria-label,
+     aria-expanded, aria-hidden on SVG), works on touch devices (tap toggles
+     menu), and closes when a link inside it is clicked.
+   - Keep the desktop layout (brand logo "Omid", social icons, nav links) intact
+     and polished with the existing theme colors.
+
+2. FIX THE BUG
+   Bug: The social links in the navbar use plain <a href>. Because they use
+   <a href> instead of TanStack Router <Link to>, clicking them does a full page
+   reload (or at least breaks client-side navigation / active state).
+   - Fix: Replace the social <a href> elements with TanStack Router <Link>
+     (using the href values as the target). Keep target="_blank"
+     rel="noopener noreferrer" for true external URLs (GitHub, Instagram,
+     YouTube). For "Email" (mailto:), keep it as an <a> since <Link> cannot do
+     mailto safely.
+   - Expected behavior: clicking social links navigates without a full page
+     reload; navbar links retain their active (text-main / bg-main/10) styling;
+     the mobile hamburger closes after selection.
+   - Verify: no console errors; client-side routing works.
+
+3. MORE GRADIENT IN BACKGROUND
+   - Strengthen the background gradients on the app shell (src/components/Layout.tsx
+     and/or body in src/styles.css). The current shell uses:
+       bg-gradient-to-br from-bg-main via-[#1e2229] to-main/20
+     Make it richer/more gradient-heavy, e.g. blend the brand purple (#C778DD),
+     dark bg (#282C33), and secondary (#ABB2BF) with multiple stops and
+     radial overlays.
+   - Add a subtle animated gradient (slowly shifting radial/linear gradients)
+     using the existing keyframes (gradient-shift / gradient-move) or new ones.
+   - Also enhance the navbar background gradient (currently
+     bg-gradient-to-r from-main/90 via-bg-main/80 to-secondary/10) so it feels
+     more vibrant while keeping text readable over it.
+   - Keep sufficient contrast for white text over the gradients.
+
+4. NAVBAR OPENS ON HOVER (DESKTOP)
+   - On desktop (md: and up), make the nav links expand/reveal a panel when the
+     user hovers over the navbar (group-hover). The current code already uses
+     group-hover:max-h-96 group-hover:opacity-100; ensure the transition is
+     smooth (duration/opacity/transform) and that keyboard focus (focus-within)
+     also opens the menu for accessibility.
+   - Keep it working on mobile via the hamburger button ONLY (no hover on touch).
+
+5. "AND SO MORE" ADDITIONAL IMPROVEMENTS
+   - Accessibility: ARIA labels, keyboard navigation, visible focus rings
+     (ring-2 ring-main), skip-to-content link already present - keep it.
+   - Responsiveness: desktop menu hides on small screens (hidden md:flex);
+     hamburger toggles on md:hidden.
+   - Animations: smooth fade/slide transitions on mobile menu open/close;
+     hover lift (hover:-translate-y-0.5) and hover color/background transitions.
+   - Polishing: better typography/spacing, rounded corners, subtle shadows,
+     gradient text for the "Omid" brand, focus-visible rings.
+   - Keep existing color palette and Chivo Mono font. Do NOT add new npm
+     packages (use only React, TanStack Router, Tailwind v4).
+
+CONSTRAINTS
+   - Use only existing dependencies. No new packages.
+   - Keep TypeScript types correct and noUnusedLocals/noUnusedParameters clean.
+   - Keep NAV_LINKS, routes, and social link destinations intact.
+   - Verify with: npm run check (biome) and npm run build.
+
+DELIVERABLE
+   - Updated src/components/Nav.tsx, src/components/Layout.tsx (and
+     src/styles.css if new gradient keyframes are needed).
+   - A short summary of: the bug fix, the gradient changes, how hover-open
+     works, and any accessibility/responsiveness notes.

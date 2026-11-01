@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allowList": [
+      "shell:npm:*"
+    ]
+  },
+  "version": 1
+}

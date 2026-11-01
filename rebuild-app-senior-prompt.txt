@@ -1,0 +1,922 @@
+================================================================================
+AI REBUILD PROMPT: OMID PORTFOLIO - SENIOR-LEVEL REBUILD
+================================================================================
+
+You are a senior front-end engineer and product designer. Rebuild the existing
+"Omid" portfolio app so it feels like a polished, accessible, production-grade
+developer portfolio - not a collection of demo sections.
+
+Work directly in the existing repository. Do not create a separate project.
+Do not add npm packages. Preserve the identity, content, routes, and deployment
+target. Replace weak implementations instead of layering more patches on top.
+
+The result must be:
+- Visually cohesive and intentionally designed.
+- Fully responsive from 360px to 1440px+.
+- Accessible with keyboard and screen readers (WCAG 2.2 AA target).
+- Statically prerendered and deployable to GitHub Pages.
+- Type-safe, lint-clean, and free of dead links and placeholder artifacts.
+- Fast, with restrained motion and no unnecessary JavaScript.
+
+================================================================================
+1. PROJECT CONTEXT (READ BEFORE CHANGING ANYTHING)
+================================================================================
+
+Stack (already installed - do not add packages):
+- TanStack Start 1.169.x
+- TanStack Router 1.170.x
+- React 19.2.x
+- Tailwind CSS 4.1.x (via @tailwindcss/vite)
+- TypeScript 6.x, strict mode, noUnusedLocals, noUnusedParameters
+- Vite 8.x
+- Biome 2.4.x for lint/format
+- TanStack Devtools packages are installed (development only)
+
+Deployment:
+- GitHub Pages, static bundle in dist/client
+- .github/workflows/deploy.yml runs npm ci and npm run build
+- TanStack Start currently prerenders /, /projects, /about, /contact
+- Site URL: https://hopeo2.github.io
+- There is no backend, database, auth, or server function requirement.
+
+Current file tree (source of truth for what exists today):
+  src/
+    components/
+      AboutSection.tsx
+      ContactSection.tsx
+      Hero.tsx
+      Icon.tsx
+      Layout.tsx
+      LinkArrow.tsx
+      Nav.tsx
+      ProjectCard.tsx
+      ProjectsSection.tsx
+      QuoteSection.tsx
+      SectionHeader.tsx
+      SkillCard.tsx
+      SkillsSection.tsx
+    data/
+      portfolio.ts
+    routes/
+      __root.tsx
+      index.tsx
+      about/index.tsx
+      projects/index.tsx
+      contact/index.tsx
+    router.tsx
+    routeTree.gen.ts   (generated - never hand-edit)
+    styles.css
+
+  public/
+    404.html
+    favicon.svg
+    images/           (empty)
+
+Current theme tokens in src/styles.css:
+  --color-bg-main: #282C33
+  --color-main: #C778DD       (brand purple)
+  --color-secondary: #ABB2BF
+  --color-white: #FFFFFF
+  --font-body: 'Chivo Mono', monospace
+
+Current routes:
+  /           Home (Hero, Quote, Projects, Skills, About, Contact, Footer)
+  /projects   Project grid only
+  /about      About copy + duplicate image block
+  /contact    Contact copy + social links
+  No project detail route. No in-app 404/error route.
+
+Current content/data facts:
+- Name: Omid
+- Canonical email in data: hello@hopeo2.github.io
+- Socials: GitHub, Instagram, YouTube, Email
+- Location: Kyiv, Ukraine
+- Three projects: ChertNodes, ProtectX, Kahoot Answers
+- Five skill groups: Languages, Databases, Other, Tools, Frameworks
+- Projects currently have href: "#" and repo: "#" (dead links)
+- site.avatar points to /images/avatar.png, but public/images is empty
+- The static public/404.html exists but is not integrated with the app design
+
+================================================================================
+2. CURRENT AUDIT: DEFECTS AND WEAKNESSES TO ELIMINATE
+================================================================================
+Use this as a checklist. Every item must be resolved or explicitly justified.
+
+2.1 ARCHITECTURE / STRUCTURE
+[A1] Inconsistent page shells.
+     Home owns its own min-h-screen wrapper and footer. /projects, /about, and
+     /contact each duplicate a min-h-screen + px + pt-20 wrapper. Layout.tsx
+     wraps only the root outlet. There is no shared Page, Section, or Container
+     abstraction.
+     Required: one root layout (Header + main + Footer) and one consistent page
+     composition system. No page-specific shell duplication.
+
+[A2] No shared footer.
+     The footer exists only on the home page, contains an empty
+     <div className="flex gap-4" />, and is absent from all subpages.
+     Required: one Footer rendered on every page with navigation, socials,
+     copyright, and a back-to-top control.
+
+[A3] Duplicated social data.
+     Social links are defined in Nav.tsx, used in ContactSection.tsx, used again
+     in contact/index.tsx, and duplicated in data/portfolio.ts.
+     Required: one typed source of truth for site metadata and socials.
+
+[A4] Email drift.
+     Nav uses mailto:hello@hopeo2.dev. Data and contact pages use
+     mailto:hello@hopeo2.github.io.
+     Required: one canonical email (use site.email = hello@hopeo2.github.io
+     unless the owner explicitly provides a replacement). Every email link must
+     render from that value.
+
+[A5] Inconsistent container widths.
+     Nav uses max-w-7xl (1280px) while every page/section uses max-w-5xl
+     (1024px). On wide screens the logo and page content do not align.
+     Required: one Container width (recommended max-w-6xl / 72rem) used by the
+     header, pages, sections, and footer. Use consistent horizontal gutters.
+
+[A6] Dead / duplicate project metadata.
+     ProjectCard still declares an "art" prop that is never used. Data provides
+     art: 1/2/3. Projects have href: "#" and repo: "#".
+     Required: remove unused fields or implement a real visual variant. Never
+     render href="#".
+
+[A7] Missing assets.
+     site.avatar is unused and /images/avatar.png does not exist. public/images
+     is empty.
+     Required: either add a real optimized image and use it, or replace it with
+     a designed CSS/SVG monogram/terminal visual. Do not reference missing files.
+
+[A8] Default README.
+     README.md is still the TanStack Start boilerplate and mentions demo pages
+     and setup steps that do not match this project.
+     Required: rewrite it with project overview, architecture, scripts, design
+     decisions, deployment, and content-editing instructions.
+
+2.2 BUGS
+[B1] LinkArrow prints "undefined" into the class attribute.
+     In LinkArrow.tsx:
+       className={`inline-flex items-center gap-1 ${className}`}
+     When className is omitted this renders class="... undefined" (visible in
+     the prerendered HTML).
+     Required: use a safe cn() helper or default className = "".
+
+[B2] currentColor utilities used as palette tokens.
+     There are 62 occurrences of text-current/*, bg-current/*, border-current/*.
+     Because the inherited current color is white, surfaces become white and
+     muted text becomes translucent white. The hero "Currently working on" badge
+     is a white box with near-invisible text in the current build.
+     Required: remove every *-current utility from src. Use semantic theme
+     tokens (text-muted, bg-surface, border-subtle, text-brand, etc.).
+     Verification: grep -R "current/" src must return nothing.
+
+[B3] Social icons split across incompatible patterns.
+     Some social links are TanStack <Link to={externalUrl as "/"}>, some are
+     plain <a>, and contact pages render mailto: links with target="_blank".
+     The Nav cast is a type-system hack. External/mail links should not pretend
+     to be internal router links.
+     Required: implement a typed AppLink/SmartLink that renders:
+       - <Link> for internal routes and internal hash navigation
+       - <a target="_blank" rel="noopener noreferrer"> for http(s) URLs
+       - <a href="mailto:..."> for email (no target blank)
+     No `as "/"`, no `any`, no @ts-ignore.
+
+[B4] About page contact CTA causes a full page reload.
+     <LinkArrow href="/#contact"> is a plain anchor.
+     Required: use a router Link with to="/" and hash="contact", or navigate to
+     the contact route. No document reload for internal navigation.
+
+[B5] "View all" projects links to the same page section.
+     ProjectsSection renders <LinkArrow href="#works">View all</LinkArrow>.
+     Required: navigate to /projects with a router Link.
+
+[B6] Hash/dead links pollute prerendering and sitemap.
+     Project href/repo "#" and hash links caused the build to prerender
+     /#, /projects/#, and /#contact as separate pages. dist/client/sitemap.xml
+     currently contains duplicate URLs (/about and /about/, /contact and
+     /contact/, /projects and /projects/, plus /# and /projects/#).
+     Required: remove all dead "#" links, configure prerendering deliberately
+     (explicit pages and/or crawlLinks: false), and ensure the sitemap contains
+     only canonical route URLs exactly once.
+
+[B7] Incomplete heading hierarchy.
+     Home has h1, section headings use h3, ProjectCard uses h4, SkillCard uses
+     h6. This skips levels and harms screen-reader navigation.
+     Required: exactly one h1 per page; section headings h2; card/subsection
+     headings h3; no skipped levels.
+
+[B8] Decorative text is exposed to assistive technology.
+     SectionHeader's "#" and LinkArrow's ">>~" / "~<" arrow text are read aloud.
+     Required: aria-hidden="true" on all decorative symbols; real labels on
+     interactive elements.
+
+[B9] Contact mailto links open a blank tab.
+     ContactSection and contact/index.tsx apply target="_blank" to every social
+     entry, including Email. mailto links should not open a new tab.
+     Required: correct behavior by link type via AppLink.
+
+[B10] TanStack Devtools ship unconditionally.
+      __root.tsx renders <TanStackDevtools> without an environment guard.
+      Required: render devtools only in development (import.meta.env.DEV), or
+      remove them from the production shell entirely.
+
+[B11] No per-route metadata.
+      Only __root.tsx defines head(). All pages share one title/description.
+      Required: unique title, description, canonical, and Open Graph/Twitter
+      metadata per route.
+
+[B12] Missing 404/error UI in the app.
+      public/404.html exists, but there is no notFoundComponent or
+      errorComponent in the router tree.
+      Required: styled in-app not-found and error components, plus keep the
+      static 404 page visually consistent.
+
+2.3 DESIGN / UX
+[C1] The design reads as disconnected sections rather than one product.
+    Cards, borders, radii, spacing, and emphasis vary without a system.
+    Required: a coherent visual language built on a small set of primitives.
+
+[C2] The hero contains a large empty placeholder instead of a meaningful visual.
+    Required: replace it with a designed portrait/monogram card, terminal/code
+    panel, or editorial composition. Use CSS/SVG; no missing image references.
+
+[C3] Desktop primary navigation is hidden until hover.
+    Current Nav has opacity-0 / pointer-events-none links at rest; a first-time
+    visitor sees only the logo and social icons.
+    Required: primary links must be visible at rest. Keep a tasteful hover
+    enhancement (animated pill/underline/panel), but discoverability must not
+    depend on hovering. Do not hide navigation behind hover.
+    Keep the mobile hamburger + animated panel.
+
+[C4] The home page lacks hierarchy and narrative.
+    Required order: Hero -> selected work -> skills/capabilities -> about
+    preview -> proof/quote -> contact CTA -> footer. Give each section a clear
+    purpose and consistent rhythm. Remove or redesign the quote if it does not
+    add value.
+
+[C5] Project cards are plain text boxes with dead links.
+    Required: card covers with CSS gradient/pattern artwork, clear title,
+    summary, tags, year, and a working "View case study" link. If real Live/Repo
+    URLs are unavailable, omit them rather than rendering "#".
+
+[C6] Subpages are thin duplicates of home sections.
+    /projects repeats the home grid; /about repeats the same image block;
+    /contact repeats the same social row.
+    Required: give each route distinct value:
+    - /projects: curated archive + optional tag filter + case-study links.
+    - /about: portrait/monogram, story, experience timeline, principles.
+    - /contact: strong email CTA, availability, location, socials, response
+      expectations.
+    Add /projects/$slug case-study pages if feasible (see section 9).
+
+[C7] Typography lacks scale and rhythm.
+    Required: use fluid clamp() heading sizes, a readable body measure (~60-70ch),
+    text-wrap: balance on headings and text-wrap: pretty on paragraphs, and
+    consistent vertical spacing.
+
+[C8] Rounded-sm borders and flat surfaces feel unfinished.
+    Required: use a controlled radius scale (md for controls, lg/xl for cards),
+    subtle glass/surface layers, 1px borders, and restrained shadows. Avoid
+    heavy glow and avoid every card looking identical.
+
+[C9] The footer is visually incomplete.
+    Required: brand mark, short statement, nav links, social icons, dynamic
+    copyright year, and back-to-top. No empty divs.
+
+2.4 ACCESSIBILITY
+[D1] Missing focus-visible styles on many links, cards, footer items, contact
+     icons, and project actions.
+[D2] Muted text opacity is used for hierarchy, producing contrast failures
+     (e.g. text-current/40 and /50 on dark or white surfaces).
+[D3] Mobile menu is implemented with max-h-96; at large text sizes or longer
+     content it can clip. Prefer grid-template-rows 0fr/1fr or a measured height.
+[D4] Decorative arrows, hashes, gradient layers, and quote ornaments are not
+     consistently hidden from assistive technology.
+[D5] Skip link exists but must remain the first focusable element and target
+     <main id="main-content" tabindex="-1">.
+[D6] External links should indicate new-tab behavior without relying on an icon
+     alone.
+[D7] Heading hierarchy is broken (see B7).
+[D8] Reduced motion is partially handled; ensure every animation, transform,
+     marquee, and transition is disabled/reduced under
+     prefers-reduced-motion: reduce.
+
+2.5 BUILD / SEO / PERFORMANCE / CI
+[E1] Sitemap duplicates and fragment URLs (see B6).
+[E2] No robots.txt.
+[E3] No canonical URLs, OG image strategy, or Person JSON-LD.
+[E4] No typecheck script in package.json.
+[E5] "format" script is "biome format" (prints) instead of writing.
+[E6] CI uses Node 20 with Vite 8; use Node 22 LTS (or the version required by
+     Vite 8) and run check + typecheck before build.
+[E7] Multiple full-screen fixed gradient layers plus large blur orbs can be
+     expensive on mobile. Reduce the number of simultaneously animated layers
+     and prefer transform/opacity over background-position animation.
+[E8] Body background and Layout background duplicate the same visual work.
+     Choose one primary source of atmosphere.
+
+================================================================================
+3. NON-NEGOTIABLE CONSTRAINTS
+================================================================================
+- Do not add npm packages or external UI/animation libraries.
+- Use React, TanStack Router/Start, Tailwind CSS v4, TypeScript, and Biome only.
+- Keep the four primary routes: /, /projects, /about, /contact.
+- Keep the existing identity: Omid, Chivo Mono, dark canvas, purple brand.
+- Keep GitHub Pages static deployment working. No server runtime requirement.
+- Do not hand-edit src/routeTree.gen.ts.
+- Do not use `any`, `@ts-ignore`, `@ts-expect-error`, or unsafe casts to bypass
+  routing/link types.
+- Do not leave dead links (`#`), missing image references, unused props, unused
+  imports, or placeholder Lorem Ipsum.
+- Do not break existing content. Improve copy only where it is clearer and more
+  professional; do not invent credentials, employers, testimonials, or metrics.
+- Keep the current social destinations and canonical email unless the owner
+  provides new values.
+- Preserve TypeScript strictness and noUnusedLocals/noUnusedParameters.
+- Do not use scroll hijacking, custom cursors, autoplay audio, or heavy parallax.
+- Every interactive element must work with mouse, touch, and keyboard.
+
+================================================================================
+4. DESIGN DIRECTION
+================================================================================
+
+4.1 CONCEPT
+"Editorial terminal portfolio": the precision of a developer tool, the warmth of
+an editorial magazine, and the calm of a dark studio.
+
+Think: large confident type, generous negative space, a restrained purple accent,
+fine grid lines, glassy surfaces, code-inspired micro-details (#, brackets,
+status dots), and one memorable hero composition. Avoid a generic "purple
+gradient SaaS" look, neon gamer styling, glassmorphism everywhere, and gratuitous
+animation.
+
+4.2 COLOR SYSTEM
+Keep the supplied palette as the foundation, but introduce semantic tokens so
+components never guess:
+
+  Canvas:        #282C33  (--color-canvas)
+  Canvas deep:   #1E2229  (--color-canvas-deep)
+  Surface:       #2E333C  (--color-surface)
+  Surface raised:#343A44  (--color-surface-raised)
+  Border:        rgba(255,255,255,0.10) (--color-border)
+  Border strong: rgba(199,120,221,0.35) (--color-border-brand)
+  Text:          #FFFFFF  (--color-text)
+  Text muted:    #ABB2BF  (--color-text-muted)
+  Text faint:    #7F8794  (--color-text-faint; only for non-essential labels)
+  Brand:         #C778DD  (--color-brand)
+  Brand strong:  #A855C8  (--color-brand-strong)
+  Brand soft:    rgba(199,120,221,0.12)
+
+Contrast rules:
+- Body text must be >= 4.5:1 against its surface. Do not use opacity below ~70%
+  for body copy.
+- Use dark text (#1E2229) on solid brand purple buttons for readable contrast.
+- Use brand text on dark surfaces, not white text on #C778DD, unless the size
+  is large and contrast is verified.
+- Borders are separators, never the only indicator of state.
+
+Recommended @theme additions (Tailwind v4):
+  --color-canvas, --color-canvas-deep, --color-surface, --color-surface-raised,
+  --color-border, --color-border-brand, --color-text, --color-text-muted,
+  --color-text-faint, --color-brand, --color-brand-strong, --color-brand-soft
+Keep legacy aliases only if needed during migration, then remove them.
+
+4.3 TYPOGRAPHY
+- Font: Chivo Mono, weights 400/500/600/700/800, display swap.
+- Display: clamp(2.75rem, 6vw, 5.5rem), line-height 0.98-1.05, letter-spacing
+  -0.04em, text-wrap: balance.
+- Section headings: clamp(1.75rem, 3vw, 2.5rem), weight 700.
+- Body: 0.9375-1.0625rem, line-height 1.65-1.8, max-width 65ch.
+- Eyebrow/label: 0.6875-0.75rem, uppercase, letter-spacing 0.18em, muted.
+- Code/terminal details: 0.75-0.875rem, muted, with brand punctuation.
+- Use tabular numerals for years/counts if supported.
+
+4.4 SPACING, GRID, SURFACES
+- Base spacing unit: 4px; use an 8px rhythm.
+- Container: max-w-6xl (72rem), px-5 sm:px-8 lg:px-12.
+- Section vertical padding: py-16 sm:py-20 lg:py-28.
+- Radius: 6px controls, 12px cards, 20px feature panels, full for pills.
+- Borders: 1px rgba(255,255,255,0.10); hover: brand-tinted.
+- Shadows: soft ambient only; no giant colored glows on text.
+- Surfaces: bg-surface/60 with border and optional backdrop-blur; use sparingly.
+- Grid background: very subtle, masked, non-interactive, aria-hidden.
+- One container width everywhere, including header/footer.
+
+4.5 MOTION
+- UI transitions: 150-250ms, ease-out.
+- Hover lift: translateY(-2px) maximum; no bouncing.
+- Page/section entrance: one subtle fade-up, 400-600ms, staggered by CSS delay.
+- Nav/mobile panel: 250-350ms opacity/transform/height.
+- Background atmosphere: slow, transform/opacity only; disable on mobile and
+  reduced motion.
+- Respect prefers-reduced-motion: reduce for every animation and transition.
+- Do not animate layout properties except the mobile menu height.
+
+4.6 VISUAL MOTIFS
+- Fine 1px rules, corner brackets, small hash prefixes, status dots.
+- Project covers generated with CSS gradients + grid/pattern + large initials or
+  abstract shapes. No stock photos, no missing files.
+- Portrait: either a real optimized image (if the owner adds one) or a designed
+  monogram card with a terminal/code treatment and a status badge.
+- Keep decorative elements aria-hidden.
+
+================================================================================
+5. TARGET ARCHITECTURE AND FILE TREE
+================================================================================
+The exact tree is flexible, but the separation below is expected. Keep files
+small and single-purpose. No component over ~180 lines.
+
+  src/
+    components/
+      layout/
+        Header.tsx
+        Footer.tsx
+        Container.tsx
+        PageShell.tsx            (optional wrapper for route content)
+      nav/
+        DesktopNav.tsx
+        MobileMenu.tsx
+        SocialLinks.tsx
+        nav-links.ts             (or import from data)
+      sections/
+        Hero.tsx
+        SelectedWork.tsx
+        Skills.tsx
+        AboutPreview.tsx
+        Quote.tsx                (optional; keep only if it earns its place)
+        ContactCta.tsx
+      projects/
+        ProjectCard.tsx
+        ProjectCover.tsx
+      ui/
+        AppLink.tsx
+        ButtonLink.tsx
+        Badge.tsx
+        Card.tsx                 (optional)
+        SectionHeading.tsx
+        Icon.tsx
+        Reveal.tsx               (optional CSS-only wrapper)
+    data/
+      site.ts                    (identity, email, location, socials)
+      navigation.ts              (primary nav + footer nav)
+      projects.ts
+      skills.ts
+      about.ts
+    lib/
+      cn.ts                      (tiny class joiner, no packages)
+      links.ts                   (link classification helpers)
+    routes/
+      __root.tsx
+      index.tsx
+      about/index.tsx
+      projects/index.tsx
+      projects/$slug.tsx         (recommended)
+      contact/index.tsx
+      not-found.tsx              (optional route) or root notFoundComponent
+    router.tsx
+    styles.css
+
+Rules:
+- Shared layout lives in __root.tsx via a RootComponent that renders
+  <Layout><Outlet /></Layout> (or equivalent Header + main + Footer).
+- Route files own page composition and metadata, not shell duplication.
+- Data files own content; components never hardcode email/social URLs.
+- UI primitives are presentational and reusable.
+- Use named exports except for route definitions.
+
+================================================================================
+6. DATA MODEL
+================================================================================
+Create one typed source of truth.
+
+Example shape (adapt as needed):
+
+  // src/data/site.ts
+  export const site = {
+    name: "Omid",
+    role: "Front-end Developer",
+    tagline: "Web designer & front-end developer",
+    email: "hello@hopeo2.github.io",
+    location: "Kyiv, Ukraine",
+    availability: "Available for freelance work",
+    bio: "...",
+    socials: [
+      { label: "GitHub", href: "https://github.com/hopeo2", icon: "github" },
+      { label: "Instagram", href: "https://instagram.com/hopeo2", icon: "instagram" },
+      { label: "YouTube", href: "https://youtube.com/@hopeo2", icon: "youtube" },
+    ],
+  } as const satisfies Site;
+
+  // Email is derived, never duplicated:
+  export const emailLink = { label: "Email", href: `mailto:${site.email}`, icon: "email" } as const;
+
+  // src/data/projects.ts
+  export type Project = {
+    slug: string;
+    title: string;
+    summary: string;
+    description: string;
+    tags: readonly string[];
+    year: string;
+    accent: string;
+    caseStudy?: { overview: string; role: string; challenge: string; outcome: string };
+    liveUrl?: string;   // only if real
+    repoUrl?: string;   // only if real
+  };
+
+Requirements:
+- Type icon names with a shared IconName union; no `as any`.
+- Remove `art` unless it drives real cover variants.
+- Use `as const satisfies` where it improves inference without over-narrowing
+  mutable data.
+- If liveUrl/repoUrl are absent, do not render those actions.
+- Ensure the canonical email is used by Header, Contact page, Contact section,
+  and Footer.
+
+================================================================================
+7. SHARED PRIMITIVES - REQUIRED BEHAVIOR
+================================================================================
+
+7.1 cn()
+A tiny local helper:
+  export function cn(...classes: Array<string | false | null | undefined>) {
+    return classes.filter(Boolean).join(" ");
+  }
+Use it for conditional classes. Never render "undefined" into className.
+
+7.2 AppLink (critical)
+A typed link abstraction that chooses the correct element:
+
+  type AppLinkProps =
+    | { to: string; hash?: string; children: ReactNode; ...internal props }
+    | { href: string; external?: boolean; children: ReactNode; ...anchor props }
+
+Behavior:
+- Internal paths (starting with "/") -> TanStack Router <Link>.
+- Internal hash-only (starting with "#") -> <a href="#..."> or a Link with hash,
+  but never reload the page.
+- http(s) -> <a href target="_blank" rel="noopener noreferrer">.
+- mailto: -> <a href="mailto:..."> (no target="_blank").
+- Render decorative icons as aria-hidden.
+- Add an accessible new-tab hint via visually hidden text or aria-label.
+- Do not use casts such as `as "/"`.
+
+Use AppLink in Header, Footer, socials, project links, contact, and CTAs.
+
+7.3 ButtonLink
+Supports primary/secondary/ghost variants, sizes, icon, external/internal via
+AppLink. Must be a real link (or button when performing an action), with visible
+focus-visible ring, disabled styles if applicable, and 44px minimum touch target.
+
+7.4 SectionHeading
+- Renders an h2 by default, with optional eyebrow and description.
+- Decorative "#" and rules are aria-hidden.
+- Uses theme tokens, not inline colors.
+- Consistent bottom spacing.
+
+7.5 Container
+- One max-width and responsive horizontal padding used everywhere.
+- No nested containers creating double gutters.
+
+7.6 Icon
+- Keep a typed icon-name union.
+- Prefer inline SVG path components over dangerouslySetInnerHTML. If keeping the
+  static string map, keep the existing safety comment and never accept user HTML.
+- Default aria-hidden="true". Provide an optional title only when the icon is the
+  sole accessible label (otherwise label the parent control).
+
+7.7 Reveal (optional)
+- CSS-only entrance using opacity/translate and animation-delay.
+- Must be disabled under reduced motion and must not cause layout shift.
+- No IntersectionObserver unless it provides clear value.
+
+================================================================================
+8. LAYOUT, HEADER, MOBILE MENU, FOOTER
+================================================================================
+
+8.1 Root layout
+- <html lang="en">, <HeadContent />, <body>, <Layout>, <Scripts />.
+- Layout: skip link, Header, <main id="main-content" tabIndex={-1}>, Footer.
+- Background atmosphere lives in one place (Layout or body, not both).
+- Shell must not create horizontal overflow and must not break position: sticky.
+  Prefer overflow-x: clip on the shell; overflow-x: hidden on body if needed.
+
+8.2 Header / desktop nav
+- Sticky top, z-40/50, translucent surface with backdrop-blur.
+- Logo: "O" monogram + gradient "Omid" wordmark; link to "/".
+- Primary links visible at rest: Home, Works, About Me, Contacts.
+- Active route: brand text, subtle brand pill/underline, aria-current="page".
+- Hover enhancement: animated underline or pill, 150-200ms; optional secondary
+  panel may expand on hover/focus, but links must remain discoverable.
+- Social icons: GitHub, Instagram, YouTube, Email; 44x44 targets; tooltips or
+  accessible labels; external new-tab behavior.
+- Keyboard: logical DOM order, visible focus-visible rings, no focus traps.
+- Do not use hover-only visibility for primary navigation.
+
+8.3 Mobile menu
+- Hamburger only below md; min 44x44; aria-label, aria-expanded, aria-controls.
+- Animated panel using grid-template-rows 0fr/1fr or a safe max-height that
+  accommodates large text; opacity/translate optional.
+- Closed panel: inert + aria-hidden so links are not tabbable.
+- Open: focus remains on the toggle by default; Tab enters links; Escape closes
+  and returns focus to the toggle; outside pointer-down closes; route change
+  closes.
+- Close after selecting a link.
+- No body-scroll lock needed for a dropdown; if using a full-screen drawer,
+  implement a focus trap and scroll lock correctly.
+- One source of nav links shared with desktop.
+
+8.4 Footer
+- Rendered on every route.
+- Brand, short positioning statement, primary nav, social links, email.
+- Dynamic copyright year (new Date().getFullYear()) and "Built with TanStack Start".
+- Back-to-top link/button with accessible label and reduced-motion-safe behavior.
+- No empty flex containers or dead links.
+
+================================================================================
+9. PAGE SPECIFICATIONS
+================================================================================
+
+9.1 HOME (/)
+Order and purpose:
+1) Hero
+   - Availability eyebrow/status dot.
+   - One h1: "Omid is a web designer and front-end developer" (or a stronger
+     editorial variant).
+   - Short supporting paragraph with clear value.
+   - Primary CTA: "View selected work" -> /projects.
+   - Secondary CTA: "Get in touch" -> /contact.
+   - Right-side composition: portrait/monogram card, terminal snippet, or
+     layered code/status panel. Must work without missing images.
+   - Optional small proof strip: location, focus, current availability. No fake
+     client logos or invented metrics.
+2) Selected work
+   - Section heading + link to /projects.
+   - Three project cards with covers, tags, year, summary, case-study link.
+   - If case-study routes are not added, link to a working project section or
+     omit the action - never "#".
+3) Skills / capabilities
+   - Group by category with clean chips or compact panels; avoid walls of text.
+   - Each group has an accessible heading.
+4) About preview
+   - Portrait/monogram + concise bio + 2-3 facts + link to /about.
+5) Quote/proof (optional)
+   - Keep only if it adds rhythm. Style as an editorial pull quote with proper
+     blockquote/cite semantics.
+6) Contact CTA
+   - Availability, email button, socials, link to /contact.
+7) Footer.
+
+9.2 PROJECTS (/projects)
+- One h1 "Selected work" or "Projects".
+- Short intro and count (e.g. "03 projects").
+- Optional accessible tag filter with aria-pressed; it must not break static
+  rendering or hide content from no-JS users unnecessarily.
+- Responsive grid: 1 col mobile, 2 cols md, 3 cols lg.
+- Cards have consistent height behavior, focus rings, hover lift, and working
+  links.
+- Empty state if filters produce no results.
+
+9.3 PROJECT DETAIL (/projects/$slug) - recommended
+- Add a dynamic route with loader data from the projects source.
+- Static prerender every project path (explicit pages or crawlLinks) and include
+  each in the sitemap exactly once.
+- Content: breadcrumb/back link, title, year, tags, cover, overview, role,
+  challenge, outcome, optional real Live/Repo links, next project.
+- notFoundComponent for unknown slugs.
+- If adding this route is not possible, do not render fake "Live"/"Repo" links on
+  cards; use the projects page as the destination.
+
+9.4 ABOUT (/about)
+- h1 "About me".
+- Portrait/monogram + story (self-taught, focus, what you build).
+- Experience/timeline (only truthful entries; use "Self-taught / Freelance"
+  rather than inventing employers).
+- Principles or working style (3 short items).
+- Skills summary or link to home skills.
+- CTA to contact.
+
+9.5 CONTACT (/contact)
+- h1 "Let's work together" or "Contact".
+- Strong email CTA using site.email; optional copy-email button with clipboard
+  fallback and an aria-live confirmation.
+- Availability, location, response expectation.
+- Social links with correct external/mailto behavior.
+- No fake contact form unless it actually submits. A mailto form is not a
+  reliable product; prefer a direct email CTA.
+- Clear focus states and 44px targets.
+
+9.6 404 / ERROR
+- In-app notFoundComponent and errorComponent matching the design.
+- Static public/404.html updated to match the visual language.
+- Links: Home, Projects, Contact.
+
+================================================================================
+10. BUG-FIX CHECKLIST (MUST ALL PASS)
+================================================================================
+[ ] No `current/` utilities anywhere in src.
+[ ] No `href: "#"`, `href="#"`, or `repo: "#"` in source/data.
+[ ] No "undefined" in rendered class attributes.
+[ ] No `as any`, `@ts-ignore`, `@ts-expect-error`, or external-link `as "/"`.
+[ ] Every external http(s) link opens safely with target/rel.
+[ ] Every mailto link does NOT open a new tab.
+[ ] Internal navigation uses TanStack Router and does not reload the document.
+[ ] About page "Get in touch" does not reload.
+[ ] "View all" projects goes to /projects.
+[ ] Active nav state uses aria-current and a visible brand style.
+[ ] One h1 per page; no skipped heading levels.
+[ ] Decorative symbols are aria-hidden.
+[ ] Mobile menu closes on link click, Escape, outside click, and route change.
+[ ] Mobile menu is inert/aria-hidden when closed.
+[ ] Header and page content share the same container width.
+[ ] Footer exists on every page and contains no empty placeholder divs.
+[ ] No missing asset references; avatar either exists or is replaced.
+[ ] Exactly one canonical email value is used everywhere.
+[ ] Prerendered output has no fragment URLs and no duplicate sitemap entries.
+[ ] Devtools are development-only.
+[ ] Every route has unique metadata.
+[ ] Layout/background does not duplicate the same fixed atmosphere in body and
+    Layout.
+
+================================================================================
+11. ACCESSIBILITY CHECKLIST
+================================================================================
+- Semantic landmarks: header, nav, main, footer; one main per page.
+- Skip link is first focusable and moves focus to main.
+- All controls reachable and operable by keyboard; no positive tabindex.
+- Focus-visible ring: 2px brand + 2px offset (or equivalent high-contrast style).
+- Active nav links have aria-current="page".
+- Mobile toggle: aria-label, aria-expanded, aria-controls; icon aria-hidden.
+- Closed mobile panel: inert + aria-hidden.
+- All images have meaningful alt text; decorative images alt="".
+- All icon-only controls have accessible names (aria-label or visually hidden).
+- External links announce new-tab behavior.
+- Color contrast: body >= 4.5:1; large text >= 3:1; UI boundaries >= 3:1.
+- Touch targets >= 44x44 CSS px, with adequate spacing.
+- Text remains readable at 200% zoom and 320px width.
+- Reduced motion disables all non-essential animation.
+- No heading levels skipped.
+- No content conveyed by color alone.
+- If a form/copy button exists: labels, error messages, aria-live feedback.
+
+================================================================================
+12. RESPONSIVE CHECKLIST
+================================================================================
+Test at minimum: 360, 390, 768, 1024, 1280, 1440, 1920.
+- No horizontal scrolling at any size.
+- Header collapses cleanly at md; mobile menu is touch-friendly.
+- Hero stacks; type does not overflow; CTA buttons wrap.
+- Project grid: 1 / 2 / 3 columns.
+- Cards do not stretch awkwardly; tags wrap.
+- Long email/URL strings wrap or truncate accessibly.
+- Footer stacks and remains readable.
+- Background effects are reduced or disabled on small screens.
+- Content respects safe-area insets where relevant.
+
+================================================================================
+13. SEO, PERFORMANCE, AND BUILD
+================================================================================
+
+SEO:
+- Per-route head: title, description, canonical, og:title, og:description,
+  og:type, og:url, twitter:card, twitter:title, twitter:description.
+- Root defaults + route overrides; no duplicate titles.
+- Add Person JSON-LD (name, jobTitle, url, sameAs) in the root head.
+- Add public/robots.txt pointing to the sitemap.
+- Sitemap: only canonical URLs, each exactly once.
+- 404 has noindex meta if applicable.
+- Open Graph image: use an existing/created static asset; do not reference a
+  missing file. If no image is added, omit og:image rather than 404ing.
+
+Performance:
+- No new JS libraries.
+- Limit background layers: max 2 animated atmosphere layers on desktop, static
+  or none on mobile.
+- Animate transform/opacity, not background-position on full-screen elements.
+- Use font-display: swap and preconnect (already present).
+- Avoid layout shift: reserve media dimensions, stable nav height.
+- Keep the client bundle small; avoid shipping devtools in production.
+- Run Lighthouse and aim for >= 95 Performance, >= 95 Accessibility, >= 95 SEO,
+  >= 95 Best Practices on the home and project pages.
+
+Build/prerender:
+- Configure explicit prerender pages and/or crawlLinks deliberately.
+- Verify dist/client/sitemap.xml contains only:
+  /, /projects, /about, /contact (+ project detail paths if added).
+- Verify no /#, /projects/#, or duplicate trailing-slash URLs.
+- Keep dist ignored by Biome and git.
+- Ensure `npm run build` exits 0 and prints no routing warnings.
+
+CI:
+- Use Node 22 LTS (or the minimum Vite 8 supports).
+- Add `npm run check`, `npm run typecheck`, and `npm run build` before upload.
+- Keep GitHub Pages permissions and artifact path dist/client.
+
+Scripts (package.json):
+- "dev": "vite dev --port 3000"
+- "build": "vite build"
+- "preview": "vite preview"
+- "typecheck": "tsc --noEmit"
+- "check": "biome check"
+- "format": "biome format --write ."
+- "lint": "biome lint"
+- "generate-routes": "tsr generate"
+
+================================================================================
+14. ACCEPTANCE CRITERIA (TESTABLE)
+================================================================================
+1. `npm run check` exits 0 with no errors or warnings.
+2. `npx tsc --noEmit` exits 0.
+3. `npm run build` exits 0 and prerenders every intended route.
+4. Sitemap has no fragment URLs and no duplicate paths.
+5. No `current/` utility remains: `grep -R "current/" src` returns nothing.
+6. No dead fragment links: `grep -R 'href="#"\|href: "#"\|repo: "#"' src`
+   returns nothing.
+7. No `any`/ts-ignore/casts in link code.
+8. Header links are visible without hover; active state is visible and announced.
+9. Mobile menu works via tap, Enter/Space, Escape, outside click, and link click;
+   closed panel is not focusable.
+10. All four routes share aligned containers, a header, and a footer.
+11. No horizontal overflow at 360px, 390px, 768px, 1024px, 1440px.
+12. Hero visual renders with no missing images.
+13. Contact email is identical everywhere and mailto does not open a blank tab.
+14. Every route has unique title/description/canonical.
+15. Reduced-motion mode disables atmosphere and entrance animations.
+16. Keyboard-only walkthrough reaches skip link, logo, nav, socials, mobile
+    toggle, page actions, and footer with visible focus.
+17. Lighthouse scores meet the targets above, or documented reasons are provided.
+18. README documents architecture, scripts, content editing, and deployment.
+19. No unused props/imports/files; no placeholder demo text.
+20. The design feels like one product: consistent spacing, radii, borders, type,
+    color semantics, and interaction states.
+
+================================================================================
+15. VERIFICATION COMMANDS
+================================================================================
+Run and report the actual output:
+
+  npm run check
+  npx tsc --noEmit
+  npm run build
+
+Additional audits:
+
+  grep -R "current/" src
+  grep -R 'href="#"\|href: "#"\|repo: "#"' src
+  grep -R "as any\|@ts-ignore\|@ts-expect-error" src
+  find public/images -type f
+  cat dist/client/sitemap.xml
+  find dist/client -maxdepth 2 -name "*.html" | sort
+
+Browser checks:
+- 1440x900: header alignment, hero composition, hover states, focus rings.
+- 768x1024: tablet breakpoint, nav collapse, card grid.
+- 390x844: mobile menu open/closed, tap targets, no overflow.
+- 320px width: text wrapping, email, tags, buttons.
+- Keyboard-only: Tab, Shift+Tab, Enter, Space, Escape.
+- prefers-reduced-motion: reduce: no continuous background motion.
+
+================================================================================
+16. DELIVERABLE FORMAT FOR THE AI
+================================================================================
+When finished, provide:
+1. A concise summary of the rebuild and design direction.
+2. A file-by-file list of what changed and why.
+3. The exact verification output for check, typecheck, and build.
+4. Any remaining TODOs that require real content/assets (for example, a real
+   avatar, live project URLs, or project case-study copy).
+5. No claims that cannot be verified by the commands above.
+
+Implementation order (recommended):
+1. Data model + link primitives + theme tokens.
+2. Root layout, header, mobile menu, footer.
+3. Shared section/UI primitives.
+4. Home page.
+5. Projects + project detail.
+6. About + contact.
+7. 404/error + metadata + SEO.
+8. Responsive/accessibility/performance pass.
+9. Cleanup, docs, CI, verification.
+
+================================================================================
+17. WHAT NOT TO DO
+================================================================================
+- Do not add packages "to save time".
+- Do not keep the old components and sprinkle gradients on them.
+- Do not use text-current / bg-current / border-current as design tokens.
+- Do not use opacity below 70% for body text.
+- Do not hide primary desktop navigation until hover.
+- Do not use href="#" as a placeholder.
+- Do not reference missing images or assets.
+- Do not use `as any` or unsafe route casts for external links.
+- Do not use a fake contact form or fake project links.
+- Do not add scroll hijacking, custom cursors, autoplay media, or heavy parallax.
+- Do not add a light theme unless explicitly requested.
+- Do not rewrite the owner's identity, socials, or email without confirmation.
+- Do not hand-edit src/routeTree.gen.ts.
+- Do not leave the README as boilerplate.
+- Do not stop at "it builds"; verify keyboard, mobile, contrast, and sitemap.
+
+================================================================================
+END OF PROMPT
+================================================================================

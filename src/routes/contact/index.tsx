@@ -1,63 +1,154 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { SectionHeader } from '#/components/SectionHeader'
-import { Icon } from '#/components/Icon'
-import { site, contact } from '#/data/portfolio'
+import { createFileRoute } from "@tanstack/react-router";
+import { Container } from "#/components/layout/Container";
+import { Section } from "#/components/layout/Section";
+import { SocialLinks } from "#/components/nav/SocialLinks";
+import { AppLink } from "#/components/ui/AppLink";
+import { Badge } from "#/components/ui/Badge";
+import { ButtonLink } from "#/components/ui/ButtonLink";
+import { Icon } from "#/components/ui/Icon";
+import { PageIntro } from "#/components/ui/PageIntro";
+import { SectionHeading } from "#/components/ui/SectionHeading";
+import { contactPage } from "#/data/contact";
+import { emailHref, site } from "#/data/site";
+import { routeHead } from "#/lib/seo";
 
-export const Route = createFileRoute('/contact/')({ component: ContactPage })
+export const Route = createFileRoute("/contact/")({
+	head: () =>
+		routeHead({
+			title: "Contact",
+			description:
+				"Get in touch with Omid, a front-end developer in Kyiv. Email is the best way to discuss freelance projects, collaborations and front-end work.",
+			path: "/contact",
+		}),
+	component: ContactPage,
+});
 
 function ContactPage() {
 	return (
-		<div className="min-h-screen px-6 md:px-12 pt-20 pb-20">
-			<div className="max-w-5xl mx-auto">
-				<SectionHeader label="contact" />
-				<div className="border border-current/30 rounded-sm p-6 md:p-10 mt-6">
-					<p className="text-current/60 text-lg leading-relaxed mb-8">
-						{contact.intro}
-					</p>
-					<div className="grid md:grid-cols-2 gap-8">
-						<div>
-							<h3 className="text-lg font-bold mb-6">Message me here</h3>
-							<div className="space-y-6">
-								<div className="flex items-center gap-4">
-									<Icon name="email" className="w-6 h-6" />
-									<div>
-										<p className="font-bold">Email</p>
-										<a href={`mailto:${site.email}`} className="text-current/80 underline underline-offset-2 hover:no-underline block">
-											{site.email}
-										</a>
-									</div>
-								</div>
-								<div className="flex items-center gap-4">
-									<Icon name="github" className="w-6 h-6" />
-									<div>
-										<p className="font-bold">GitHub</p>
-										<a href={site.social[0].href} target="_blank" rel="noopener noreferrer" className="text-current/80 underline underline-offset-2 hover:no-underline block">
-											github.com/hopeo2
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div>
-							<h3 className="text-lg font-bold mb-6">Follow</h3>
-							<div className="flex gap-4">
-								{site.social.map((s) => (
-									<a
-										key={s.label}
-										href={s.href}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="w-12 h-12 rounded-sm border border-current/30 flex items-center justify-center text-current/60 hover:text-current hover:border-current/50 transition-all"
-										aria-label={s.label}
-									>
-										<Icon name={s.icon as any} className="w-6 h-6" />
-									</a>
-								))}
+		<>
+			<PageIntro
+				eyebrow="Contact"
+				title="Let's work together."
+				description={contactPage.lead}
+				meta={
+					<div className="flex flex-wrap items-center gap-2">
+						<Badge tone="brand">{site.availability}</Badge>
+						<Badge>{site.location}</Badge>
+					</div>
+				}
+			/>
+
+			<Section labelledBy="email-title">
+				<Container className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+					<div className="relative overflow-hidden rounded-feature border border-border-brand bg-surface/30 p-6 sm:p-10">
+						<div
+							aria-hidden="true"
+							className="pointer-events-none absolute inset-0 bg-grid opacity-25"
+						/>
+						<div className="relative">
+							<p className="eyebrow">01 — Email</p>
+							<h2 id="email-title" className="text-section mt-3 text-text">
+								Start with a message.
+							</h2>
+							<p className="prose-copy mt-4">{contactPage.responseNote}</p>
+
+							<AppLink
+								href={emailHref}
+								className="mt-6 inline-flex max-w-full items-center gap-3 break-all text-lg font-semibold text-brand-bright transition-colors hover:text-text sm:text-2xl"
+							>
+								<Icon name="email" className="size-5 shrink-0" />
+								{site.email}
+							</AppLink>
+
+							<div className="mt-7 flex flex-wrap gap-3">
+								<ButtonLink href={emailHref} icon="email" iconPosition="left">
+									Email me
+								</ButtonLink>
+								<ButtonLink
+									to="/projects"
+									variant="secondary"
+									icon="arrow-right"
+								>
+									See my work
+								</ButtonLink>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	)
+
+					<aside
+						aria-labelledby="details-title"
+						className="rounded-feature border border-border bg-surface/30 p-6 sm:p-8"
+					>
+						<h2 id="details-title" className="eyebrow">
+							Details
+						</h2>
+						<dl className="mt-5 space-y-5">
+							<div>
+								<dt className="eyebrow">Availability</dt>
+								<dd className="mt-1.5 text-sm text-text">
+									{site.availability}
+								</dd>
+							</div>
+							<div>
+								<dt className="eyebrow">Location</dt>
+								<dd className="mt-1.5 text-sm text-text">{site.location}</dd>
+							</div>
+							<div>
+								<dt className="eyebrow">Response</dt>
+								<dd className="mt-1.5 text-sm text-text">
+									{contactPage.responseNote}
+								</dd>
+							</div>
+						</dl>
+					</aside>
+				</Container>
+			</Section>
+
+			<Section
+				labelledBy="elsewhere-title"
+				className="border-t border-border bg-canvas-deep/30"
+			>
+				<Container className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+					<SectionHeading
+						id="elsewhere-title"
+						eyebrow="02 — Elsewhere"
+						title="Find me online."
+						description="Code, experiments and the occasional video. Every link opens in a new tab except email."
+					/>
+					<SocialLinks variant="list" />
+				</Container>
+			</Section>
+
+			<Section labelledBy="services-title" className="border-t border-border">
+				<Container>
+					<SectionHeading
+						id="services-title"
+						eyebrow="03 — Services"
+						title="What I can help with."
+						description="A small, focused set of ways to work together. If your project does not fit neatly, describe it anyway."
+					/>
+
+					<div className="mt-10 grid gap-4 md:grid-cols-3">
+						{contactPage.services.map((service, index) => (
+							<article
+								key={service.title}
+								className="rounded-card border border-border bg-surface/30 p-5"
+							>
+								<span
+									aria-hidden="true"
+									className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-bright"
+								>
+									0{index + 1}
+								</span>
+								<h3 className="text-card mt-4 text-text">{service.title}</h3>
+								<p className="mt-2 text-sm leading-relaxed text-text-muted">
+									{service.body}
+								</p>
+							</article>
+						))}
+					</div>
+				</Container>
+			</Section>
+		</>
+	);
 }
