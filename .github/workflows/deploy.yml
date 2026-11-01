@@ -21,6 +21,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Pages must be configured with "Source: GitHub Actions". If it is still
+      # set to "Deploy from a branch", the legacy Jekyll build runs on every
+      # push, renders README.md as the home page and overwrites this deployment.
+      - name: Check Pages source
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          build_type=$(curl -sS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" \
+            | jq -r '.build_type // "unknown"')
+          echo "Pages build type: $build_type"
+          if [ "$build_type" != "workflow" ]; then
+            echo "::warning::GitHub Pages is not using GitHub Actions as its source (build_type=$build_type). Set Settings → Pages → Build and deployment → Source to \"GitHub Actions\", otherwise the legacy Jekyll build will serve README.md instead of this site."
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

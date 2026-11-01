@@ -135,6 +135,12 @@ The GitHub Actions workflow (`.github/workflows/deploy.yml`) uses Node 22 and
 runs `npm ci`, `npm run check`, `npm run typecheck` and `npm run build` before
 uploading `dist/client` as the Pages artifact.
 
+> **Required repository setting:** Settings → Pages → Build and deployment →
+> Source must be **GitHub Actions**. With "Deploy from a branch" selected,
+> GitHub also runs its own Jekyll build of `main`; because Jekyll renders
+> `README.md` as the home page, that build replaces the deployed site with the
+> README. The workflow prints a warning when the Pages source is still a branch.
+
 ## Accessibility
 
 - Semantic landmarks, one `h1` per page and no skipped heading levels
